@@ -1,0 +1,62 @@
+#include <DHT.h>
+
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+
+#define DHTPIN 2
+#define DHTTYPE DHT11
+#define OLED_RESET 4
+
+Adafruit_SSD1306 display(OLED_RESET);
+
+int Soil = A0;
+int SoilVal = 0;
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup(){
+  Serial.begin(9600);
+  dht.begin();
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  display.display();
+  
+  
+}
+
+void loop(){
+  delay(5000);
+  float humidity = dht.readHumidity();
+  float temperature = dht.readTemperature();
+
+  SoilVal = analogRead(Soil);
+
+  display.setCursor(0,0);
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  
+  display.print("AGRIVA INDONESIA");
+  
+  display.setCursor(0,1);
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  
+  display.print("Humidity : ");
+  display.print(humidity);
+  display.println("%");
+  display.print("Temperature : ");
+  display.print(temperature);
+  display.println("C");
+
+  display.setCursor(0,2);
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  
+  display.print("Soil : ");
+  display.println(SoilVal);
+
+  delay(5000);
+}
